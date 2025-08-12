@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Add Employee</title></head>
+<body>
+<h2>Add Employee</h2>
+<form id="addForm">
+  Name: <input type="text" name="name" required><br>
+  Department: <input type="text" name="department" required><br>
+  Email: <input type="email" name="email" required><br>
+  <button type="submit">Add</button>
+</form>
+
+<script>
+  document.getElementById("addForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+          name: form.name.value,
+          department: form.department.value,
+          email: form.email.value
+      };
+      fetch("/api/employees", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+      }).then(() => window.location.href = "index.html");
+  });
+</script>
+</body>
+</html>

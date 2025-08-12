@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Employee</title></head>
+<body>
+<h2>Edit Employee</h2>
+<form id="editForm">
+    Name: <input type="text" name="name" required><br>
+    Department: <input type="text" name="department" required><br>
+    Email: <input type="email" name="email" required><br>
+    <button type="submit">Update</button>
+</form>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    fetch(`/api/employees/${id}`)
+        .then(res => res.json())
+        .then(emp => {
+            const form = document.getElementById("editForm");
+            form.name.value = emp.name;
+            form.department.value = emp.department;
+            form.email.value = emp.email;
+        });
+
+    document.getElementById("editForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            name: form.name.value,
+            department: form.department.value,
+            email: form.email.value
+        };
+        fetch(`/api/employees/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        }).then(() => window.location.href = "index.html");
+    });
+</script>
+</body>
+</html>

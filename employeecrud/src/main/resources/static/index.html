@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><title>Employee List</title></head>
+<body>
+<h2>All Employees</h2>
+<table border="1" id="employeeTable">
+  <tr><th>ID</th><th>Name</th><th>Department</th><th>Email</th><th>Actions</th></tr>
+</table>
+<br><a href="add.html">Add New Employee</a>
+
+<script>
+  fetch("/api/employees")
+      .then(res => res.json())
+      .then(data => {
+          const table = document.getElementById("employeeTable");
+          data.forEach(emp => {
+              const row = table.insertRow();
+              row.innerHTML = `
+                  <td>${emp.id}</td>
+                  <td>${emp.name}</td>
+                  <td>${emp.department}</td>
+                  <td>${emp.email}</td>
+                  <td>
+                      <button onclick="deleteEmp(${emp.id})">Delete</button>
+                      <a href="edit.html?id=${emp.id}">Edit</a>
+                  </td>`;
+          });
+      });
+
+  function deleteEmp(id) {
+      fetch(`/api/employees/${id}`, { method: 'DELETE' })
+          .then(() => location.reload());
+  }
+</script>
+</body>
+</html>
